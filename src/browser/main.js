@@ -1,3 +1,4 @@
+/* @flow */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Root from './app/Root';
@@ -9,7 +10,7 @@ import { browserHistory } from 'react-router';
 import { fromJSON } from '../common/transit';
 import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 
-const initialState = fromJSON(window.__INITIAL_STATE__);
+const initialState = fromJSON(window.__INITIAL_STATE__); // eslint-disable-line no-underscore-dangle
 const reportingMiddleware = configureReporting({
   appVersion: initialState.config.appVersion,
   sentryUrl: initialState.config.sentryUrl,
@@ -32,7 +33,7 @@ ReactDOM.render(
 // gist.github.com/gaearon/06bd9e2223556cb0d841#file-naive-js
 if (module.hot) {
   module.hot.accept('./app/Root', () => {
-    const NextRoot = require('./app/Root');
+    const NextRoot = require('./app/Root').default;
 
     ReactDOM.render(
       <NextRoot history={history} store={store} />
