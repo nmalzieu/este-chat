@@ -1,5 +1,4 @@
 /* @flow weak */
-import * as actions from './actions';
 import Room from './room';
 import { Record } from '../transit';
 import { List, Seq, Map } from 'immutable';
@@ -12,7 +11,7 @@ const State = Record({
 
 const chatReducer = (state = new State(), action) => {
   switch (action.type) {
-    case actions.ADD_ROOM: {
+    case 'ADD_ROOM': {
       const room = new Room(action.payload);
       return state.set('rooms', state.rooms.push(room));
     }
