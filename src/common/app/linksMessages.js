@@ -14,6 +14,10 @@ const LinkMessages = defineMessages({
     defaultMessage: 'Firebase',
     id: 'app.links.firebase',
   },
+  chat: {
+    defaultMessage: 'Chat',
+    id: 'app.links.chat',
+  },
   home: {
     defaultMessage: 'Home',
     id: 'app.links.home',

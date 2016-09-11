@@ -14,6 +14,8 @@ import Profile from './me/ProfilePage';
 import Settings from './me/SettingsPage';
 import SignIn from './auth/SignInPage';
 import Todos from './todos/TodosPage';
+import Chat from './chat/ChatPage';
+import ChatRoom from './chat/ChatRoomPage';
 
 const createRoutes = (getState: Function) => {
   const requireViewer = (nextState, replace) => {
@@ -37,6 +39,8 @@ const createRoutes = (getState: Function) => {
       <Route component={Offline} path="offline" />
       <Route component={SignIn} path="signin" />
       <Route component={Todos} path="todos" />
+      <Route component={Chat} path="chat" />
+      <Route component={ChatRoom} path="chat/:chatRoomId" />
       <Route component={NotFound} path="*" />
     </Route>
   );

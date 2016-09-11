@@ -17,10 +17,10 @@ nconf.defaults({
   defaultLocale: 'en',
   firebase: {
     // To get the config, just click Add web app from the overview page.
-    apiKey: 'AIzaSyDZRAOrDErAaC-TCKbr4cMzaohsPR4sWgU',
-    authDomain: 'este.firebaseapp.com',
-    databaseURL: 'https://este.firebaseio.com',
-    storageBucket: 'project-808488257248094054.appspot.com',
+    apiKey: "AIzaSyCH6Ix-o6qYjSssIRoJZZTEENWmyEQL_kY",
+    authDomain: "chatx-6d0b6.firebaseapp.com",
+    databaseURL: "https://chatx-6d0b6.firebaseio.com",
+    storageBucket: "chatx-6d0b6.appspot.com",
   },
   googleAnalyticsId: 'UA-XXXXXXX-X',
   isProduction: process.env.NODE_ENV === 'production',

@@ -121,6 +121,74 @@ const onAuth = user => ({ dispatch, getState }) => {
   };
 };
 
+export const saveRoom = (viewer, room) => ({ firebase }) => {
+    const roomRef = firebase.child('chat/rooms');
+    const promise = roomRef.push({ name: room, creatorId: viewer.id });
+    return {
+        type: 'FIREBASE_SAVE_ROOM',
+        payload: promise,
+    };
+};
+
+export const loadMessages = (roomId) => ({ dispatch, firebase }) => {
+    const messagesRef = firebase.child('chat/messages/' + roomId);
+
+    const promise = messagesRef.orderByChild('timestamp').limitToLast(10).on('child_added', function(snap) {
+        dispatch({
+            type: 'ADD_ROOM_MESSAGES',
+            roomId: roomId,
+            message: {
+                id: snap.key,
+                ...snap.val()
+            }
+        });
+    });
+    return {
+        type: 'FIREBASE_GET_ROOM_MESSAGES',
+        payload: promise,
+    };
+}
+
+export const sendMessage = (user, roomId, content) => ({ firebase, firebaseDatabase }) => {
+    const messagesRef = firebase.child('chat/messages/' + roomId);
+    const promise = messagesRef.push({
+        user: {
+            id: user.id,
+            userName: user.displayName
+        },
+        content: content,
+        timestamp: firebaseDatabase.ServerValue.TIMESTAMP,
+
+    });
+    return {
+        type: 'FIREBASE_SEND_MESSAGE',
+        payload: promise,
+    };
+};
+
+export const joinRoom = (user, roomId) => ({ firebase }) => {
+    const roomPresenceRef = firebase.child('chat/rooms/' + roomId + '/presence');
+    const userName = user.displayName;
+    roomPresenceRef.child(user.id).transaction(function(currentUserData) {
+        return userName;
+    });
+    return {
+        type: 'FIREBASE_PUSH_JOIN_ROOM',
+        payload: roomPresenceRef
+    };
+};
+
+export const kickUserFromRoom = (userId, roomId) => ({ firebase }) => {
+    const roomPresenceRef = firebase.child('chat/rooms/' + roomId + '/presence');
+    roomPresenceRef.child(userId).transaction(function(currentUserData) {
+        return null;
+    });
+    return {
+        type: 'FIREBASE_PUSH_KICK_USER',
+        payload: roomPresenceRef
+    };
+}
+
 // firebase.google.com/docs/database/web/offline-capabilities#section-sample
 const createPresenceMonitor = () => {
   let connections = [];
@@ -262,6 +330,11 @@ export const firebaseStart = () => {
       const user = mapFirebaseUserToAppUser(firebaseUser);
       monitorPresence(firebase, firebaseDatabase, user);
       dispatch(onAuth(user));
+
+      firebase.child('chat/rooms').on('value', snap => {
+        const rooms = snap.val();
+        dispatch({ type: 'SET_ROOMS', rooms: rooms });
+       });
     });
 
     firebase.child('.info/connected').on('value', snap => {

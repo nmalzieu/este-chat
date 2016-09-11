@@ -61,6 +61,10 @@ export default [
     "defaultMessage": "Firebase",
   },
   {
+    "id": "app.links.chat",
+    "defaultMessage": "Chat",
+  },
+  {
     "id": "app.links.home",
     "defaultMessage": "Home",
   },

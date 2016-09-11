@@ -60,6 +60,11 @@ type UserPresence {
   user: User
 }
 
+type ChatRoom {
+  name: LongString,
+  creatorId: LongString
+}
+
 // Paths
 
 path /hello-world is HelloWorld {
@@ -87,4 +92,28 @@ path /users-presence/{uid} is UserPresence[] {
   create() { isViewer(uid) }
   update() { true }
   delete() { true }
+}
+
+path /chat/rooms {
+  create() { isSignedIn() }
+  update() { isSignedIn() }
+  read() { isSignedIn() }
+}
+
+path /chat/rooms/{uid}/presence/{presenceId} {
+  update() {data.parent().creatorId == auth.uid}
+  read() { isSignedIn() }
+  create() { isSignedIn() }
+}
+
+path /chat/rooms/{uid} is ChatRoom {
+  create() { isSignedIn() && this.creatorId == auth.uid }
+  update() { isSignedIn() }
+  read() { isSignedIn() }
+}
+
+path /chat/messages/{uid} {
+  create() { isSignedIn() }
+  update() { isSignedIn() }
+  read() { isSignedIn() }
 }
